@@ -1,9 +1,8 @@
-//regex
 //regex para validar el password, el username, el email y el telefono
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[0-9]).{6,24}$/;
-const USERNAME_REGEX = /^(?=.*[a-z])(?=.*[0-9]).{6,16}$/;
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,20}$/;
+const USERNAME_REGEX = /^(?=.*[a-z])(?=.*[0-9]).{6,15}$/;
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
-const PHONE_REGEX = /^[0-9]{6,16}$/;
+const PHONE_REGEX = /^[0-9]{6,10}$/;
 
 
 // selectors
@@ -15,6 +14,7 @@ const phoneInput = document.querySelector("#phone");
 const passwordInput = document.querySelector("#password");
 const confirmPasswordInput = document.querySelector("#confirm-password");
 const form = document.querySelector("#form");
+const submitBtn = document.querySelector("#submit-btn");
 
 //validaciones
 let usernameValidation = false;
@@ -22,6 +22,7 @@ let emailValidation = false;
 let phoneValidation = false;
 let passwordValidation = false;
 let confirmPasswordValidation = false;
+let countryValidation = false;
 
 //funcion
 //esta funcion se encarga de validar los inputs, recibe el evento, la validacion y el elemento a validar
@@ -40,21 +41,33 @@ const validation = (e, validation, element) => {
         informationElement.classList.add("show-information");
     }
 };
+
+//funcion para habilitar/deshabilitar el boton submit
+const checkForm = () => {
+    if (usernameValidation && emailValidation && phoneValidation && passwordValidation && confirmPasswordValidation && countryValidation) {
+        submitBtn.disabled = false;
+    } else {
+        submitBtn.disabled = true;
+    }
+};
+
 //removing the country code from the select options
 [...countrySelect.options].forEach(option => {
     option.innerHTML = option.innerHTML.split('(')[0];
 });
 
-//event listeners
 //username validation
+//se le agrega "checkForm" a cada evento para verificar si el formulario esta completo y habilitar el boton de submit
 usernameInput.addEventListener("input", e => {
     usernameValidation = USERNAME_REGEX.test(e.target.value);
     validation(e, usernameValidation, usernameInput);
+    checkForm();
 });
 //email validation
 emailInput.addEventListener("input", e => {
     emailValidation = EMAIL_REGEX.test(e.target.value);
     validation(e, emailValidation, emailInput);
+    checkForm();
 });
 //phone validation
 countrySelect.addEventListener("change", e => {
@@ -62,21 +75,31 @@ countrySelect.addEventListener("change", e => {
     phoneCode.innerHTML = `+${optionSelected.value}`;
     phoneCode.classList.add("correct");
     countrySelect.classList.add("correct");
+    checkForm();
 });
 //phone validation
 phoneInput.addEventListener("input", e => {
     phoneValidation = PHONE_REGEX.test(e.target.value);
     validation(e, phoneValidation, phoneInput);
+    checkForm();
 });
 //password validation
 passwordInput.addEventListener("input", e => {
     passwordValidation = PASSWORD_REGEX.test(e.target.value);
     validation(e, passwordValidation, passwordInput);
+    // Revalidate confirm password if it has value
+    if (confirmPasswordInput.value) {
+        confirmPasswordValidation = passwordInput.value === confirmPasswordInput.value;
+        const fakeEvent = { target: confirmPasswordInput };
+        validation(fakeEvent, confirmPasswordValidation, confirmPasswordInput);
+    }
+    checkForm();
 });
 //confirm password validation
 confirmPasswordInput.addEventListener("input", e => {
     confirmPasswordValidation = passwordInput.value === e.target.value;
     validation(e, confirmPasswordValidation, confirmPasswordInput);
+    checkForm();
 });
 
 //submit event
