@@ -44,6 +44,7 @@ const validation = (e, validation, element) => {
 
 //funcion para habilitar/deshabilitar el boton submit
 const checkForm = () => {
+    // "&&" sirve para verificar que todas las validaciones sean true, si alguna es false, el boton se deshabilita
     if (usernameValidation && emailValidation && phoneValidation && passwordValidation && confirmPasswordValidation && countryValidation) {
         submitBtn.disabled = false;
     } else {
@@ -52,6 +53,7 @@ const checkForm = () => {
 };
 
 //removing the country code from the select options
+// "..." sirve para convertir el HTMLCollection en un array, para poder usar el metodo forEach y modificar cada opcion del select
 [...countrySelect.options].forEach(option => {
     option.innerHTML = option.innerHTML.split('(')[0];
 });
@@ -72,9 +74,16 @@ emailInput.addEventListener("input", e => {
 //phone validation
 countrySelect.addEventListener("change", e => {
     const optionSelected = [...e.target.children].find(option => option.selected);
-    phoneCode.innerHTML = `+${optionSelected.value}`;
-    phoneCode.classList.add("correct");
-    countrySelect.classList.add("correct");
+    if (optionSelected.value) {
+        countryValidation = true;
+        phoneCode.innerHTML = `+${optionSelected.value}`;
+        phoneCode.classList.add("correct");
+        countrySelect.classList.add("correct");
+    } else {
+        countryValidation = false;
+        phoneCode.innerHTML = "";
+        countrySelect.classList.remove("correct");
+    }
     checkForm();
 });
 //phone validation
