@@ -1,9 +1,8 @@
 //regex para validar el password, el username, el email y el telefono
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,20}$/;
 const USERNAME_REGEX = /^(?=.*[a-z])(?=.*[0-9]).{6,15}$/;
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 const PHONE_REGEX = /^[0-9]{6,10}$/;
-
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$/;
 
 // selectors
 const countrySelect = document.querySelector("#countryC");
@@ -72,6 +71,7 @@ emailInput.addEventListener("input", e => {
     checkForm();
 });
 //phone validation
+// addEventListener para el select de pais, cuando se cambia la opcion seleccionada, se verifica si tiene un valor, si es asi, se muestra el codigo de telefono y se habilita la validacion del pais, si no, se deshabilita la validacion del pais y se oculta el codigo de telefono
 countrySelect.addEventListener("change", e => {
     const optionSelected = [...e.target.children].find(option => option.selected);
     if (optionSelected.value) {
@@ -99,6 +99,7 @@ passwordInput.addEventListener("input", e => {
     // Revalidate confirm password if it has value
     if (confirmPasswordInput.value) {
         confirmPasswordValidation = passwordInput.value === confirmPasswordInput.value;
+        // Se crea un evento falso para pasar al input de confirm password, ya que la funcion de validacion necesita un evento para mostrar el mensaje de error o el borde rojo/verde
         const fakeEvent = { target: confirmPasswordInput };
         validation(fakeEvent, confirmPasswordValidation, confirmPasswordInput);
     }
@@ -113,6 +114,7 @@ confirmPasswordInput.addEventListener("input", e => {
 
 //submit event
 //cuando se envia el formulario, se evita que se recargue la pagina y se muestra en consola un objeto con los datos del usuario
+//cambi
 form.addEventListener("submit", e => {
     e.preventDefault();
     //se crea un objeto con los datos del usuario
@@ -124,4 +126,6 @@ form.addEventListener("submit", e => {
     };
     //aqui se podria hacer una peticion a un servidor para guardar el usuario, pero por ahora solo se muestra en consola
     console.log(user);
+    alert ("Usuario registrado exitosamente");
 });
+

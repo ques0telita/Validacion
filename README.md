@@ -5,7 +5,7 @@ Este es un proyecto de práctica desarrollado por un estudiante de programacion.
 ##  Vista previa
 La aplicación cuenta con una interfaz moderna con un fondo de video y un contenedor con efectos de transparencia
 
-- **Usuario:** Validación de longitud (3-20 caracteres)
+- **Usuario:** Validación de longitud (6-15 caracteres)
 - **Email:** Comprobación de formato de correo válido
 - **Teléfono:** Validación de caracteres numéricos
 - **Contraseña:** Requisitos de seguridad (Mayúsculas, minúsculas y números)
